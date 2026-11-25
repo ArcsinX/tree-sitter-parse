@@ -61,7 +61,7 @@ See `CPP_EXTENSIONS` in `benchmark.py` for the full list.
 
 | File | Contents |
 | --- | --- |
-| `rss.svg` | One elapsed-time axis for both process types and a logarithmic RSS axis in MiB. Each child contributes its live samples and a lifetime peak at its exit time. Marks may overlap in the overview. |
+| `rss.svg` | One elapsed-time axis and a logarithmic RSS axis in MiB. The chart shows live parser samples, each child's lifetime peak at its exit time, and a dashed line for the median of those peaks. |
 | `rss.csv` | Timestamped RSS in bytes, PID, process type and file ID. |
 | `files.csv` | File ID, PID, path, grammar, start and end on the same clock, exit status, OS-reported lifetime peak RSS in bytes, and live sample count. File IDs distinguish processes even when the OS reuses PIDs. |
 | `summary.json` | Revision, timings, file counts, and maximum RSS. |
