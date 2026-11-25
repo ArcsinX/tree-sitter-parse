@@ -105,7 +105,7 @@ from 1.37 s to 0.27 s including preprocessing. The two unchanged controls,
 
 ![Peak RSS before and after shortening generated LLVM tables](results/preprocessing/rss-comparison.png)
 
-[Full-run RSS overlay](results/shortened-full/rss-overlay.png) pairs each file's original and shortened parser RSS on the original run's elapsed-time axis.
+[Full-run RSS overlay](results/shortened-full/rss-overlay.png) pairs each file's original and shortened parser RSS on the original run's elapsed-time axis. Each line retains the largest measured peak in each display bin.
 
 The chart shows medians from the [40 measured trials](results/preprocessing/trials.csv).
 The [per-file summary](results/preprocessing/summary.json) includes the

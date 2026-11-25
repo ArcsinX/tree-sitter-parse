@@ -15,7 +15,7 @@ MIB = 1024 ** 2
 WIDTH, HEIGHT = 1240, 628
 LEFT, RIGHT, TOP, BOTTOM = 93, 1202, 106, 535
 MEDIAN_COLOR = "#b44d0e"
-OVERLAY_MARKS = (("#7959a5", 0.65, 3.6), ("#087e82", 0.85, 2.2))
+OVERLAY_LINES = (("#a630e0", 2.8), ("#007fe4", 2.1))
 
 
 @dataclass
@@ -80,7 +80,10 @@ def render(directory, output=None, start=0.0, end=None, *, linear=False):
 def draw(runs, subtitle, output, *, linear, title=None, overlay=False):
     start, end = runs[0].start, runs[-1].end
     comparison = len(runs) > 1 and not overlay
-    width, right = (1650, 1612) if len(runs) > 1 else (WIDTH, RIGHT)
+    if overlay:
+        width, right = 1100, 1062
+    else:
+        width, right = (1650, 1612) if comparison else (WIDTH, RIGHT)
     rss_values = [rss for run in runs for series in (run.samples, run.peaks)
                   for _, rss in series]
     if not rss_values:
@@ -124,6 +127,18 @@ def draw(runs, subtitle, output, *, linear, title=None, overlay=False):
                 f'stroke-width="{size}" stroke-linecap="round">\n'
                 + "\n".join(paths) + "\n</g>")
 
+    def peak_line(points, color, stroke_width):
+        # Retain the largest observed peak in each common display bin.
+        columns = {}
+        for elapsed, rss in points:
+            column = round((x(elapsed) - LEFT) / 2)
+            columns[column] = max(rss, columns.get(column, 0))
+        positions = " ".join(f"{min(LEFT + column * 2, right)},{y(rss):.2f}"
+                             for column, rss in sorted(columns.items()))
+        return (f'<polyline class="peak-line" points="{positions}" fill="none" '
+                f'stroke="{color}" stroke-width="{stroke_width}" '
+                'stroke-linecap="round" stroke-linejoin="round"/>')
+
     def label(px, py, content, cls="", anchor="start"):
         return (f'<text x="{px:.2f}" y="{py:.2f}" class="{cls}" '
                 f'text-anchor="{anchor}">{escape(content)}</text>')
@@ -132,7 +147,8 @@ def draw(runs, subtitle, output, *, linear, title=None, overlay=False):
     scale_description = "linear" if linear else "logarithmic"
     if title is None:
         title = "Tree-sitter RSS by allocator on LLVM" if comparison else "Tree-sitter RSS on LLVM"
-    description = ("Original and shortened parser peaks aligned by source file." if overlay else
+    description = ("Original and shortened parser peaks aligned by source file, "
+                   "showing the highest peak per display bin." if overlay else
                    "Live RSS and lifetime peak RSS for sequential parser processes.")
     svg = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{HEIGHT}" '
@@ -173,13 +189,13 @@ def draw(runs, subtitle, output, *, linear, title=None, overlay=False):
     ]
     for index, run in enumerate(runs):
         if overlay:
-            svg.append(markers(run.peaks, *OVERLAY_MARKS[index]))
+            svg.append(peak_line(run.peaks, *OVERLAY_LINES[index]))
         else:
             svg.append(markers(run.samples, "#318799", 0.43, 1.8))
             svg.append(markers(run.peaks, "#7041b8", 0.66, 2.3))
     for index, (run, middle) in enumerate(zip(runs, medians, strict=True)):
         if middle is not None and (not overlay or middle not in medians[:index]):
-            color = OVERLAY_MARKS[index][0] if overlay and not common_median else MEDIAN_COLOR
+            color = OVERLAY_LINES[index][0] if overlay and not common_median else MEDIAN_COLOR
             svg.append(
                 f'<path class="median-line" d="M{x(run.start):.2f},{y(middle):.2f} '
                 f'H{x(run.end):.2f}" stroke="{color}" stroke-width="2.4" '
@@ -190,15 +206,19 @@ def draw(runs, subtitle, output, *, linear, title=None, overlay=False):
         svg.append(f'<path d="M{px:.2f},{TOP}V{BOTTOM}" stroke="#8294a8" '
                    'stroke-width="1.3" stroke-dasharray="5 4"/>')
     legend = (
-        ((LEFT, OVERLAY_MARKS[0][0], runs[0].label),
-         (LEFT + 192, OVERLAY_MARKS[1][0], runs[1].label))
+        ((LEFT, OVERLAY_LINES[0][0], runs[0].label),
+         (LEFT + 192, OVERLAY_LINES[1][0], runs[1].label))
         if overlay else
         ((LEFT, "#318799", "Parser RSS samples"),
          (LEFT + 192, "#7041b8", "Per-parser lifetime peak RSS"))
     )
     for px, color, name in legend:
-        svg.append(f'<circle cx="{px + 4}" cy="602" r="4" fill="{color}"/>')
-        svg.append(label(px + 16, 607, name))
+        if overlay:
+            svg.append(f'<path d="M{px},602h23" stroke="{color}" stroke-width="2.8"/>')
+            svg.append(label(px + 31, 607, name))
+        else:
+            svg.append(f'<circle cx="{px + 4}" cy="602" r="4" fill="{color}"/>')
+            svg.append(label(px + 16, 607, name))
     if (comparison or common_median) and any(value is not None for value in medians):
         px = LEFT + 425
         svg.append(f'<path d="M{px},602h23" stroke="{MEDIAN_COLOR}" '
@@ -211,7 +231,7 @@ def draw(runs, subtitle, output, *, linear, title=None, overlay=False):
         for index, middle in enumerate(medians):
             if middle is not None:
                 px = LEFT + 425 + 192 * index
-                color = OVERLAY_MARKS[index][0]
+                color = OVERLAY_LINES[index][0]
                 svg.append(f'<path d="M{px},602h23" stroke="{color}" '
                            'stroke-width="2.4" stroke-dasharray="8 4"/>')
                 svg.append(label(px + 31, 607, f"{runs[index].label} median · {middle / MIB:.2f} MiB"))
