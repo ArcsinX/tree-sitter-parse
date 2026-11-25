@@ -1,0 +1,242 @@
+[
+  {
+    "path": "compiler-rt/test/builtins/Unit/udivmodti4_test.c",
+    "source_bytes": 16125794,
+    "reduced_bytes": 67161,
+    "original_wall_s": 1.3714887920068577,
+    "original_parse_s": 1.305775,
+    "original_peak_rss_bytes": 361218048,
+    "original_nodes": 3590899,
+    "reduced_wall_s": 0.00688333400466945,
+    "reduced_parse_s": 0.004675,
+    "reduced_peak_rss_bytes": 2686976,
+    "reduced_nodes": 555,
+    "preprocess_wall_s": 0.2668287499982398,
+    "preprocess_peak_rss_bytes": 32899072,
+    "pipeline_wall_s": 0.2739411249931436,
+    "pipeline_peak_child_rss_bytes": 32899072,
+    "original_exit_codes": [
+      2
+    ],
+    "reduced_exit_codes": [
+      2
+    ],
+    "tables": [
+      {
+        "table": "tests",
+        "line": 46,
+        "entries_before": 65280,
+        "removed_bytes": 16058633
+      }
+    ]
+  },
+  {
+    "path": "libc/src/__support/ryu_long_double_constants.h",
+    "source_bytes": 12482455,
+    "reduced_bytes": 124281,
+    "original_wall_s": 0.7470584999973653,
+    "original_parse_s": 0.711388,
+    "original_peak_rss_bytes": 192659456,
+    "original_nodes": 1566312,
+    "reduced_wall_s": 0.010926417002337985,
+    "reduced_parse_s": 0.008639,
+    "reduced_peak_rss_bytes": 3276800,
+    "reduced_nodes": 970,
+    "preprocess_wall_s": 0.2479467919911258,
+    "preprocess_peak_rss_bytes": 29114368,
+    "pipeline_wall_s": 0.2587830009870231,
+    "pipeline_peak_child_rss_bytes": 29114368,
+    "original_exit_codes": [
+      2
+    ],
+    "reduced_exit_codes": [
+      2
+    ],
+    "tables": [
+      {
+        "table": "POW10_SPLIT",
+        "line": 64,
+        "entries_before": 35898,
+        "removed_bytes": 3690276
+      },
+      {
+        "table": "POW10_SPLIT_2",
+        "line": 35965,
+        "entries_before": 84515,
+        "removed_bytes": 8667898
+      }
+    ]
+  },
+  {
+    "path": "llvm/lib/Support/UnicodeNameToCodepointGenerated.cpp",
+    "source_bytes": 1837938,
+    "reduced_bytes": 98899,
+    "original_wall_s": 0.2602002909989096,
+    "original_parse_s": 0.242285,
+    "original_peak_rss_bytes": 86228992,
+    "original_nodes": 560534,
+    "reduced_wall_s": 0.005232374998740852,
+    "reduced_parse_s": 0.002841,
+    "reduced_peak_rss_bytes": 3325952,
+    "reduced_nodes": 4041,
+    "preprocess_wall_s": 0.06512250000378117,
+    "preprocess_peak_rss_bytes": 20348928,
+    "pipeline_wall_s": 0.07022516601136886,
+    "pipeline_peak_child_rss_bytes": 20348928,
+    "original_exit_codes": [
+      0
+    ],
+    "reduced_exit_codes": [
+      0
+    ],
+    "tables": [
+      {
+        "table": "UnicodeNameToCodepointIndex_",
+        "line": 1046,
+        "entries_before": 278248,
+        "removed_bytes": 1739039
+      }
+    ]
+  },
+  {
+    "path": "polly/lib/External/isl/include/isl/typed_cpp.h",
+    "source_bytes": 2365781,
+    "reduced_bytes": 2365781,
+    "original_wall_s": 0.4516797919932287,
+    "original_parse_s": 0.433235,
+    "original_peak_rss_bytes": 84230144,
+    "original_nodes": 1007385,
+    "reduced_wall_s": 0.4504659999947762,
+    "reduced_parse_s": 0.432963,
+    "reduced_peak_rss_bytes": 84230144,
+    "reduced_nodes": 1007385,
+    "preprocess_wall_s": 0,
+    "preprocess_peak_rss_bytes": 0,
+    "pipeline_wall_s": 0.4504659999947762,
+    "pipeline_peak_child_rss_bytes": 84230144,
+    "original_exit_codes": [
+      0
+    ],
+    "reduced_exit_codes": [
+      0
+    ],
+    "tables": []
+  },
+  {
+    "path": "llvm/lib/Target/X86/X86ISelLowering.cpp",
+    "source_bytes": 2714475,
+    "reduced_bytes": 2714475,
+    "original_wall_s": 0.26719429199874867,
+    "original_parse_s": 0.251528,
+    "original_peak_rss_bytes": 69566464,
+    "original_nodes": 708213,
+    "reduced_wall_s": 0.2678194159962004,
+    "reduced_parse_s": 0.252024,
+    "reduced_peak_rss_bytes": 69566464,
+    "reduced_nodes": 708213,
+    "preprocess_wall_s": 0,
+    "preprocess_peak_rss_bytes": 0,
+    "pipeline_wall_s": 0.2678194159962004,
+    "pipeline_peak_child_rss_bytes": 69566464,
+    "original_exit_codes": [
+      2
+    ],
+    "reduced_exit_codes": [
+      2
+    ],
+    "tables": []
+  },
+  {
+    "path": "libcxxabi/test/DemangleTestCases.inc",
+    "source_bytes": 5247598,
+    "reduced_bytes": 30299,
+    "original_wall_s": 0.19134687499899883,
+    "original_parse_s": 0.182404,
+    "original_peak_rss_bytes": 58408960,
+    "original_nodes": 449255,
+    "reduced_wall_s": 0.004368499998236075,
+    "reduced_parse_s": 0.002044,
+    "reduced_peak_rss_bytes": 2867200,
+    "reduced_nodes": 17,
+    "preprocess_wall_s": 0.11761974998808,
+    "preprocess_peak_rss_bytes": 22052864,
+    "pipeline_wall_s": 0.12198824998631608,
+    "pipeline_peak_child_rss_bytes": 22052864,
+    "original_exit_codes": [
+      2
+    ],
+    "reduced_exit_codes": [
+      2
+    ],
+    "tables": [
+      {
+        "table": "string-pair rows",
+        "line": 2,
+        "entries_before": 29933,
+        "removed_bytes": 5217299
+      }
+    ]
+  },
+  {
+    "path": "llvm/include/llvm/Testing/Demangle/DemangleTestCases.inc",
+    "source_bytes": 5247598,
+    "reduced_bytes": 30299,
+    "original_wall_s": 0.191659707998042,
+    "original_parse_s": 0.182602,
+    "original_peak_rss_bytes": 58408960,
+    "original_nodes": 449255,
+    "reduced_wall_s": 0.004169583000475541,
+    "reduced_parse_s": 0.002044,
+    "reduced_peak_rss_bytes": 2867200,
+    "reduced_nodes": 17,
+    "preprocess_wall_s": 0.11768599999777507,
+    "preprocess_peak_rss_bytes": 21790720,
+    "pipeline_wall_s": 0.12185404200863559,
+    "pipeline_peak_child_rss_bytes": 21790720,
+    "original_exit_codes": [
+      2
+    ],
+    "reduced_exit_codes": [
+      2
+    ],
+    "tables": [
+      {
+        "table": "string-pair rows",
+        "line": 2,
+        "entries_before": 29933,
+        "removed_bytes": 5217299
+      }
+    ]
+  },
+  {
+    "path": "compiler-rt/test/builtins/Unit/ppc/floatditf_test.h",
+    "source_bytes": 2343774,
+    "reduced_bytes": 38223,
+    "original_wall_s": 0.16095691701048054,
+    "original_parse_s": 0.15045,
+    "original_peak_rss_bytes": 54722560,
+    "original_nodes": 532172,
+    "reduced_wall_s": 0.004780249990290031,
+    "reduced_parse_s": 0.002553,
+    "reduced_peak_rss_bytes": 3080192,
+    "reduced_nodes": 74,
+    "preprocess_wall_s": 0.07540391699876636,
+    "preprocess_peak_rss_bytes": 19136512,
+    "pipeline_wall_s": 0.08016379199398216,
+    "pipeline_peak_child_rss_bytes": 19136512,
+    "original_exit_codes": [
+      0
+    ],
+    "reduced_exit_codes": [
+      0
+    ],
+    "tables": [
+      {
+        "table": "tests",
+        "line": 7,
+        "entries_before": 38008,
+        "removed_bytes": 2305551
+      }
+    ]
+  }
+]

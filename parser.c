@@ -1,8 +1,10 @@
+#include <inttypes.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <time.h>
 #include <tree_sitter/api.h>
 #include <unistd.h>
 
@@ -46,10 +48,11 @@ static char *read_source(const char *path, uint32_t *length) {
 int main(int argc, char **argv) {
     if ((argc != 3 && argc != 4) ||
         (strcmp(argv[1], "c") != 0 && strcmp(argv[1], "cpp") != 0) ||
-        (argc == 4 && strcmp(argv[3], "--tree") != 0)) {
-        fprintf(stderr, "Usage: %s {c|cpp} FILE [--tree]\n", argv[0]);
+        (argc == 4 && strcmp(argv[3], "--tree") != 0 && strcmp(argv[3], "--stats") != 0)) {
+        fprintf(stderr, "Usage: %s {c|cpp} FILE [--tree|--stats]\n", argv[0]);
         return FAILED;
     }
+    bool stats = argc == 4 && strcmp(argv[3], "--stats") == 0;
     uint32_t length;
     char *source = read_source(argv[2], &length);
     if (!source)
@@ -63,12 +66,22 @@ int main(int argc, char **argv) {
         free(source);
         return FAILED;
     }
+    struct timespec start, end;
+    if (stats)
+        clock_gettime(CLOCK_MONOTONIC, &start);
     TSTree *tree = ts_parser_parse_string(parser, NULL, source, length);
+    if (stats)
+        clock_gettime(CLOCK_MONOTONIC, &end);
     int result = FAILED;
     if (tree) {
         TSNode root = ts_tree_root_node(tree);
         result = ts_node_has_error(root) ? RECOVERED : PARSED;
-        if (argc == 4) {
+        if (stats) {
+            double elapsed = (end.tv_sec - start.tv_sec) +
+                             (end.tv_nsec - start.tv_nsec) / 1e9;
+            printf("{\"parse_s\":%.9f,\"nodes\":%" PRIu32 "}\n",
+                   elapsed, ts_node_descendant_count(root));
+        } else if (argc == 4) {
             char *expression = ts_node_string(root);
             if (!expression || puts(expression) == EOF || fflush(stdout) != 0)
                 result = FAILED;

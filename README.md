@@ -93,3 +93,51 @@ python3 plot_rss.py results-repeat-filtered --linear --output results-repeat-fil
 The filter preserves the original elapsed times and Python RSS samples. It
 reads excluded file sizes from the benchmark checkout. Use `--source-root`
 if that checkout has moved.
+
+## Shorten generated tables for structural parsing
+
+Six of the eight files above 45 MiB contained large generated tables. The
+largest, `udivmodti4_test.c`, contains 65,280 test vectors and produced
+3.59 million Tree-sitter nodes. Keeping one vector reduced the tree to
+555 nodes, parser peak RSS from 344.48 MiB to 2.56 MiB, and total wall time
+from 1.37 s to 0.27 s including preprocessing. The two unchanged controls,
+`typed_cpp.h` and `X86ISelLowering.cpp`, stayed at 80.33 and 66.34 MiB.
+
+![Peak RSS before and after shortening generated LLVM tables](results/preprocessing/rss-comparison.png)
+
+The chart shows medians from the [40 measured trials](results/preprocessing/trials.csv).
+The [per-file summary](results/preprocessing/summary.json) includes the
+table names, their entry counts, and timings before and after shortening.
+
+`benchmark_preprocess.py` repeats the eight highest-RSS cases from the
+45 MiB outlier list. Each trial runs the parser on the original and on a
+temporary shortened copy, one process at a time, using the system allocator
+by default. The two implementation files without a selected table are
+measured twice as unchanged controls.
+
+```sh
+cmake --build build --parallel 1
+python3 benchmark_preprocess.py --out results-preprocessing
+python3 plot_preprocess.py results-preprocessing/summary.json results-preprocessing/rss-comparison.svg
+```
+
+`summary.json` contains per-file medians. `trials.csv` includes input sizes,
+syntax tree node counts, time inside Tree-sitter, process wall time, and peak
+RSS for the parser and the separate preprocessing process. Pipeline wall
+time includes preprocessing and parsing. Pipeline peak child RSS is the
+larger of the two child peaks in each sequential trial.
+
+To shorten a single table, explicitly name the array and write a new file.
+Repeat `--array` to name multiple arrays. For an include fragment containing
+only brace-enclosed string pairs, use `--string-pairs`.
+
+```sh
+python3 preprocess_payloads.py \
+  ../llvm-project/compiler-rt/test/builtins/Unit/udivmodti4_test.c \
+  /tmp/udivmodti4-short.c --array tests
+```
+
+The transform keeps a representative entry and preserves line breaks across
+the removed region. Later byte offsets change, and the shortened input loses
+the omitted entries and their syntax nodes. Use it for structural analysis
+that can omit those payloads.
